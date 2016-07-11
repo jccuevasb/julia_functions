@@ -1,0 +1,18 @@
+#In ran_beta.jl
+#---This is a function to generate random numbers that follow a cauchy distribution
+#---Taken from http://www.johndcook.com/julia_rng.html
+using Distributions
+include("ran_gamma.jl")
+function ran_beta(a,b)
+   if a<=0 || b <=0
+      error("Beta parameters must be positive")
+   end
+## There are more efficient methods for generating beta samples.
+## However such methods are a little more efficient and much more complicated.
+## For an explanation of why the following method works, see
+## http://www.johndcook.com/distribution_chart.html#gamma_beta
+u = ran_gamma(a, 1.0);        #---width of beta distribution? 1.0?
+v = ran_gamma(b, 1.0);
+rnum=u/(u + v);
+return rnum-0.5
+end  #---end function ran_cauchy

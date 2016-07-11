@@ -1,0 +1,22 @@
+# In drawline.jl
+#--This function plot a horizontal line
+function hline(ycoord,lw,ls,col)
+#ycoord= ycoordinate
+#lw=linewidth   float value
+#ls=linestyle   string
+ax=gca();                     #---get the handler for the current axis
+xlim=ax[:get_xlim]();         #---compute the limits of the x coordinate
+#print("xlim= ",xlim)
+plot(xlim,(ycoord,ycoord),color=col,linewidth=lw, linestyle=ls);
+end
+#--This function plot a vertical line
+function vline(xcoord,lw,ls,col)
+#xcoord= xcoordinate
+#lw=linewidth   float value
+#ls=linestyle   string
+ax=gca();                     #---get the handler for the current axis
+ylim=ax[:get_ylim]();         #---compute the limits of the x coordinate
+#print("ylim= ", ylim)
+#print("xlim= ",xlim)
+plot((xcoord,xcoord),ylim,color=col,linewidth=lw, linestyle=ls);
+end

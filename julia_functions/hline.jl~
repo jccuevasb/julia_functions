@@ -1,0 +1,11 @@
+# In hline.jl
+#--This function plot a horizontal line
+function hline(ycoord,lw,ls)
+#ycoord= ycoordinate
+#lw=linewidth   float value
+#ls=linestyle   string
+ax=gca();                     #---get the handler for the current axis
+xlim=ax[:get_xlim]();         #---compute the limits of the x coordinate
+print("xlim= ",xlim)
+plot(xlim,(ycoord,ycoord),color="k",linewidth=lw, linestyle=ls);
+end

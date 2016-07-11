@@ -1,0 +1,19 @@
+#In skewjc.jl
+include("meanjc.jl")                          #--include library 
+include("varjc.jl")                          #--include library 
+
+function skewjc(vector::Vector)
+N=length(vector);
+s3=0.0;                                        #--sample mean sum
+m=0.0;                                        #--counter for the sample size
+  for i=1:N
+     if isnan(vector[i])==0;                  #--make sure to sum numeric values
+        s3=s3+vector[i]^3;
+        m=m+1;
+     end
+  end
+mu=meanjc(vector);                           #---mean
+sigma2=varjc(vector);                        #---variance
+skewness=(s3/m-3*mu*sigma2-mu^3)/sigma2^(3/2);  
+return skewness
+end
