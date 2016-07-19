@@ -5,7 +5,7 @@
 #include("ran_laplace.jl")
 #using PyCall
 
-function perturb_log(yplinear::Vector,Np::Integer)
+function perturb_log(yplinear::Vector,Np::Integer,wvf::Integer)
 #@pyimport pylab as npy
 inistep=Int64[];
 lstep=Int64[];
@@ -15,6 +15,8 @@ Nve=length(yplinear);
 ypert=zeros(Nve);      #---Initialize vector to storage perturbed positions
 vector=zeros(Nve);      #---Initialize vector to storage perturbed positions
 vector=log(yplinear);
+dvf=0;
+dvf=log(wvf);
 pert=0.8;
 peru=0.5;
 alpha=2;           #----parameters for beta distribution
@@ -35,13 +37,14 @@ beta=2;            #----Parameters for beta distribution
       #ypert[j]=vector[j]+(-peru+(2*peru)*ran_rng(Np))*h[j];                           #--use rng device to produce random numbers
       #ypert[j]=vector[j]+ran_beta(alpha,beta)*h[j];                                       #--beta  (-0.5,0.5)
       #ypert[j]=vector[j]+(-peru+(2*peru)*rand())*h[j]+(pert*randn());             #--uniform + gaussian
-      if j==2;                                                           #---constraint second vf
-          while ((ypert[j]<=vector[1]) | (ypert[j]>=vector[3]))
-               ypert[j]=vector[j]+(pert*randn()*h[j]);   
-          end 
-      end
-      while ((ypert[j]<=vector[1]) | (ypert[j]>=vector[Nve]))
-           ypert[j]=vector[j]+(pert*randn()*h[j]);                    #--gauss +  gauss
+      #if j==2;                                                     #---constraint second vf
+      #    while ((ypert[j]<=vector[1]) | (ypert[j]>=vector[3]))
+      #         ypert[j]=vector[j]+(pert*randn()*h[j]);   
+      #    end 
+      #end
+      while ((ypert[j]<=(vector[1]+dvf)) | (ypert[j]>=(vector[Nve]-dvf)))  #--Constraint
+      #while ((ypert[j]<=vector[1]) | (ypert[j]>=vector[Nve]))
+      #     ypert[j]=vector[j]+(pert*randn()*h[j]);                    #--gauss +  gauss
            #ypert[j]=vector[j]+(ran_laplace(0,0.5)*h[j]);     #--laplace distr mu=0 scale factor=0.5
            #ypert[j]=vector[j]+(pert*randn()*h[j])+40*randn();         #--gauss distr mu=0 sigma=1 
            #ypert[j]=vector[j]+(pert*randn())*h[j]+(-peru+(2*peru)*rand());         #--gauss distr + uniform

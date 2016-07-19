@@ -15,25 +15,29 @@ function umean_profiles(yplus::Vector,uplus::Vector,Np::Integer,gp::Integer,wvf:
 #----ystep=row vector of y+ wall normal positions of 5481 elements
 #----Initialize vectors
 const dy=wvf;
-ypro=zeros(length(yplus));
-ypperturbated=zeros(length(yplus));
+const nypl=length(yplus);                #--number of elements yplus
+ypro=zeros(nypl);
+dyvf=trues(nypl-1);                      #--Intialize boolean array
+ypperturbated=zeros(nypl);
 #gp=5481;                              #--Grid Points
 U=zeros(gp);    
 #--------------------------------
-ypperturbated=perturb(yplus[:],Np);
-#ypperturbated=perturb_log(yplus[:],Np);        #----perturbation in log space
+ypperturbated=perturb(yplus[:],Np,wvf);
+#ypperturbated=perturb_log(yplus[:],Np,wvf);        #----perturbation in log space
 #ypperturbated=perturbv2(yplus[:],Np);         #--Negative and positive discriminator
 ypro=round(Int,ypperturbated);
-#print("ypro_1=",ypro)
-#print("\n");
-while length(unique(ypro))<length(ypro)     #---check for repeated elements
-     ypperturbated=perturb(yplus[:],Np);
-     #ypperturbated=perturb_log(yplus[:],Np);        #--pertrubation in log space
+dyvf=abs(diff(ypro)).>(wvf+3);                 #--make sure that distance between vf is <wvf
+#while length(unique(ypro))<length(ypro)     #---check for repeated elements
+while (all(dyvf)==false && Np>0)                     #---not repeated elements and spaced by wvf at least
+     ypperturbated=perturb(yplus[:],Np,wvf);
+     #ypperturbated=perturb_log(yplus[:],Np,wvf);        #--pertrubation in log space
      #ypperturbated=perturbv2(yplus[:],Np);         #--Negative and positive discriminator
      ypro=round(Int,ypperturbated);
+     dyvf=abs(diff(ypro)).>(wvf+3);                 #--make sure that distance between vf is <wvf
      #print("ypro_2=",ypro)
      #print("\n");
-end                    
+end           
+
 sorty,sortu=sortyv(ypro[:],uplus);
 #print("sorty=",sorty)
 #print("\n");
@@ -54,7 +58,7 @@ for i=2:Nvf-1                                 #--fill from 2nd step to last one
        print("y+= ", sorty[i]);
        print("\n");
     end     
-    print("y+= ", sorty[i+1]);
+    print("y+1= ", sorty[i+1]);
     print("\n");              
     U[sorty[i]+1+dy:sorty[i+1]]=sortu[i];
 end
