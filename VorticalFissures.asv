@@ -9,8 +9,6 @@ fontname = 'Times New Roman';
 linewidth = 3;
 markersize = 10;
 
-load LeeMoserChannel
-
 h = 4; % VF thickness (in plus units)
 
 phic = 0.5*(1+sqrt(5));
@@ -49,8 +47,7 @@ ypVfUp = ypVf + h/2;
 figure;
 plot(ypMaster, UpMaster, 'o-', 'markersize', 0.5*markersize); hold on;
 plot(ypVf, UpVf, 'ro',  'markersize', markersize);
-plot(LM.yp, LM.Up, 'k', 'linewidth', linewidth)
-legend('Master profile','VFs','Lee & Moser', 'location','northwest')
+legend('Master profile','VFs','location','northwest')
 xlabel('$y^+$','fontsize',fontsize,'fontname',fontname,'interpreter','latex');
 ylabel('$U^+$','fontsize',fontsize,'fontname',fontname,'interpreter','latex');
 set(gca,'fontsize',fontsize,'fontname',fontname,'xscale','log');
@@ -71,18 +68,23 @@ distribution = 'Gaussian';
 
 [ypVFpertsort, UpVFpert] = VfPert(ypVf, UpVf, distribution, percentage, nIter);
 
-%% Generate velocity Profiles
+%% Combine overlapping VFs 
 
 [ypPert, UpPert] = VfProfile(ypVFpertsort, UpVFpert, h);
 
 % average all perturbed velocities
 UpPertAvg = mean(UpPert,2);
 
+%%
+
+
+% TEST TEST
+load yp5200pp
 figure;
 plot(ypMaster, UpMaster,'g-','linewidth',linewidth); hold on;
-plot(ypPert, UpPertAvg,'bo','markersize',markersize/2,'linewidth',linewidth); 
+plot(yplus_pert, Uplus_pert_m,'bo','markersize',markersize/2,'linewidth',linewidth); 
 plot(ypVf, UpVf,'ro--','markersize',10,'linewidth',linewidth);
-plot(LM.yp, LM.Up, 'k', 'linewidth', linewidth)
+plot(yp5200, U5200,'k-','markersize',10,'linewidth',linewidth);
 
 xlim([1e1 1e4])
 ylim([5 28])
