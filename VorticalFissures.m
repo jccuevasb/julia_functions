@@ -72,7 +72,7 @@ distribution = 'Gaussian';
 [ypVFpertsort, UpVFpert] = VfPert(ypVf, UpVf, distribution, percentage, nIter);
 
 %% Generate velocity Profiles
-%TEST 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TEST 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [ypPert, UpPert] = VfProfile(ypVFpertsort, UpVFpert, h);
 
 % average all perturbed velocities
